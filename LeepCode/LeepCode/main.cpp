@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "ArrayOperation.h"
 
@@ -14,7 +15,7 @@ void OsForeachArrayElement(string title,int* A,int length)
 	cout << endl;
 }
 
-void RemoveElement()
+void ArrayDemo()
 {
 	cout << "remove a element from array !" << endl;
 	int A[5] = {3,2,2,5,6};
@@ -35,10 +36,47 @@ void RemoveElement()
 	OsForeachArrayElement("Result:", C, cLength);
 
 
+	cout << "Plus One !" << endl;
+	vector<int> numbers = { 1, 2, 3, 4, 9 };
+	cout << "Raw Number: ";
+	for (auto number: numbers)
+	{
+		cout << number;
+	}
+	cout << endl;
+	 vector<int> result = PlusOne(numbers);
+
+	cout << "Now Number: ";
+	for (auto number : result)
+	{
+		cout << number;
+	}
+	cout << endl;
+
+
+	cout << "yang hui san jiao !" << endl;
+	vector<vector<int>> values = YangHuiSanJiao(6);
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		
+		for (size_t j = 0; j < values[i].size(); ++j)
+		{
+			cout << " " << values[i][j];
+		}
+		cout << endl;
+	}
+
+	cout << "better yang hui san jiao !" << endl;
+	vector<int> rowValues = BetterYangHuiSanJiao(5);
+	for (size_t i = 0; i<rowValues.size(); ++i)
+	{
+		cout <<" "<< rowValues[i];
+	}
+
 }
 
 void main()
 {
-	RemoveElement();
+	ArrayDemo();
 }
 
