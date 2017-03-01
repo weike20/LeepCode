@@ -1,6 +1,9 @@
 #pragma once
 
 #include <vector>
+#include <map>
+#include <hash_map>
+#include <algorithm>
 using namespace std;
 
 
@@ -146,7 +149,182 @@ int* MergeSortedArray(int *A, int m, int *B, int n)
 	return A;
 }
 
+vector<int> TwoSum(vector<int> &numbers, int targetNumber)
+{
+	vector<int> result;
+	if (numbers.size() <= 1)
+		return result;
 
+	hash_map<int,int> myMap;
+	for (size_t i = 0; i < numbers.size(); ++i)
+		myMap[numbers[i]] = i;
+	for (size_t i = 0; i < numbers.size(); ++i)
+	{
+		int value = targetNumber - numbers[i];
+		if (myMap.find(value) != myMap.end())
+		{
+			size_t index = myMap[value];
+			if (index == i)
+				continue;
+			if (index < i)
+			{
+				result.push_back(index + 1);
+				result.push_back(i + 1);
+				
+			}
+			else
+			{
+				result.push_back(i + 1);
+				result.push_back(index + 1);
+			}
+			break;
+		}
+	}
+	return result;
+}
+
+vector<vector<int>> ThreeSum(vector<int> &numbers)
+{
+	vector<vector<int>> result;
+	if (numbers.size() <= 2)
+		return result;
+
+	sort(numbers.begin(), numbers.end());
+
+	for (size_t i = 0; i < numbers.size()-2; ++i)
+	{
+		size_t j = i + 1;
+		size_t k = numbers.size() - 1;
+		while (j < k)
+		{
+			vector<int> current;
+			if (numbers[i] + numbers[j] + numbers[k] == 0)
+			{
+				current.push_back(numbers[i]);
+				current.push_back(numbers[j]);
+				current.push_back(numbers[k]);
+				result.push_back(current);
+				j++;
+				k--;
+				while (j<k &&numbers[j-1]==numbers[j])
+					j++;
+				while (j<k&&numbers[k] == numbers[k+1])
+					k--;
+			}
+			else if (numbers[i] + numbers[j] + numbers[k] < 0)
+			{
+				j++;
+			}
+			else
+			{
+				k--;
+			}
+		}
+		while (i < numbers.size()-1 && numbers[i] == numbers[i+1])
+			i++;
+	}
+	return result;
+}
+
+int ThreeSumClosest(vector<int> &number, int target)
+{
+	if (number.size() <= 2)
+		return -1;
+
+	int result = 0;
+
+	sort(number.begin(), number.end());
+	int distance = INT_MAX;
+
+	for (size_t i = 0; i < number.size()-2; ++i)
+	{
+		size_t j = i + 1;
+		size_t k = number.size() - 1;
+
+		while (j < k)
+		{
+			int tempValue = number[i] + number[j] + number[k];
+			int tempDistance = 0;
+			if (tempValue < target)
+			{
+				int tempDistance = target - tempValue;
+				if (tempDistance < distance)
+				{
+					distance = tempDistance;
+					result = number[i] + number[j] + number[k];
+				}
+				j++;
+			}
+			else if (tempValue > target)
+			{
+				int tempDistance = tempValue - target;
+				if (tempDistance < distance)
+				{
+					distance = tempDistance;
+					result = number[i] + number[j] + number[k];
+				}
+				k--;
+			}
+			else
+			{
+				result = number[i] + number[j] + number[k];
+				return result;
+			}
+		}
+
+	}
+	return result;
+}
+
+vector<vector<int>> FourSum(vector<int> &num, int target)
+{
+	vector<vector<int>> result;
+	if (num.size() <= 3)
+		return result;
+	sort(num.begin(), num.end());
+
+	for (size_t i = 0; i < num.size() - 3; ++i)
+	{
+		if (i>0 && num[i] == num[i-1])
+			continue;
+		for (size_t j = i+1; j < num.size() - 2;++j)
+		{
+			if (j > i+1 && num[j] ==num[j-1])
+				continue;
+			size_t k = j + 1;
+			size_t l = num.size() - 1;
+			while (k<l)
+			{
+				int sum = num[i] + num[j] + num[k] + num[l];
+				if (sum == target)
+				{
+					vector<int> current;
+					current.push_back(num[i]);
+					current.push_back(num[j]);
+					current.push_back(num[k]);
+					current.push_back(num[l]);
+					result.push_back(current);
+
+					do
+					{
+						++k;
+					} while (k < l && num[k] == num[k - 1]);
+
+					do
+					{
+						++l;
+					} while (k < l && num[l] == num[l + 1]);
+
+				}
+				else if (sum < target)
+					++k;
+				else
+					--l;
+			}
+		}
+	}
+	return result;
+}
 
 void OsForeachArrayElement(string title, int* A, int length)
 {
@@ -222,6 +400,49 @@ void ArrayDemo()
 	int E[5] = { 3, 4, 6, 8, 9 };
 	int *mergeResult = MergeSortedArray(D, 4, E, 5);
 	OsForeachArrayElement("Result: ", mergeResult, 9);
+	cout << endl;
+
+	cout << "2 求和" << endl;
+	vector<int> F = { 1, 3, 5, 7, 9 };
+	vector<int> twoSum = TwoSum(F, 10);
+	cout << "result";
+	for (vector<int>::iterator itr = twoSum.begin(); itr != twoSum.end(); ++itr)
+	{
+		cout << " " << *itr;
+	}
+	cout << endl;
+
+	cout << "3 求和" << endl;
+	vector<int> G = { -5, -3, -1, 7, 8, 9 };
+	vector<vector<int>> threeSum = ThreeSum(G);
+	for (auto itr = threeSum.begin(); itr!=threeSum.end(); ++itr)
+	{
+		for (auto item:(*itr))
+		{
+			cout << " " << item;
+		}
+		cout << endl;
+	}
+	cout << endl;
+
+	cout << "3 求和：离目标最近的三个数求和 " << endl;
+	vector<int> H = { 1, 2, 3, 5, 8, 9 };
+	int threeSumClosest =  ThreeSumClosest(H, 23);
+	cout << "three sum closest is : " << threeSumClosest << endl;
+
+	cout << endl;
+	cout << "4 求和" << endl;
+	vector<int> J = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+	vector<vector<int>>  fourSum = FourSum(J, 10);
+	for (auto itr = fourSum.begin(); itr != fourSum.end(); ++itr)
+	{
+		for (auto item : (*itr))
+		{
+			cout << " " << item;
+		}
+		cout << endl;
+	}
+
 }
 
 
