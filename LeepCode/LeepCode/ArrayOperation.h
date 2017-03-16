@@ -326,6 +326,31 @@ vector<vector<int>> FourSum(vector<int> &num, int target)
 	return result;
 }
 
+int FindMinimum(vector<int> &num)
+{
+	size_t length = num.size();
+	if (length == 0)
+		return 0;
+	else if (length == 1)
+		return num[0];
+	else if (length == 2)
+		return min(num[0], num[1]);
+
+	int begin = 0;
+	int end = num.size() - 1;
+	while (begin < end-1)
+	{
+		if (num[begin] < num[end])
+			return num[begin];
+		int mid = begin + (end - begin) / 2;
+		if (num[mid]>num[begin])
+			begin = mid;
+		else if (num[mid]<num[begin])
+			end = mid;
+	}
+	return min(num[begin], num[end]);
+}
+
 void OsForeachArrayElement(string title, int* A, int length)
 {
 	cout << title;
@@ -442,6 +467,12 @@ void ArrayDemo()
 		}
 		cout << endl;
 	}
+
+	cout << endl;
+	cout << "在轮转排序数组当中找最小值" << endl;
+	vector<int> K = { 5, 6, 7, 8, 1, 2, 3, 4 };
+	int minimumValue =  FindMinimum(K);
+	cout << "Minimum Result : " << minimumValue << endl;
 
 }
 
